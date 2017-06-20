@@ -17,7 +17,7 @@ $app->get('/', function (Request $request) use ($app) {
     $feature = new \Features\SwitchFeature('featureFacebook');
 
     // Condition
-//    $conditionFn = function() use ($request) { return (bool) $request->get('featureFacebook'); };
+    $conditionFn = function() use ($request) { return (bool) $request->get('featureFacebook'); };
 //    $feature = new \Features\ConditionFeature('featureFacebook', $conditionFn);
 
     // Percentage
@@ -26,6 +26,15 @@ $app->get('/', function (Request $request) use ($app) {
 //    $extraHeaders = ['X-Feature-UserQuota' => $feature->getUserQuota()];
 
     $facebookLanding = $featureService->isActive($feature);
+
+    $sender = new \Liuggio\StatsdClient\Sender\SocketSender(/*'localhost', 8126, 'udp'*/);
+    $client  = new \Liuggio\StatsdClient\StatsdClient($sender);
+    $factory = new \Liuggio\StatsdClient\Factory\StatsdDataFactory('\Liuggio\StatsdClient\Entity\StatsdData');
+
+    $statsd = new \Liuggio\StatsdClient\Service\StatsdService($client, $factory);
+
+    $statsdKey = sprintf('stats.web.registration.%s.count', $facebookLanding ? 'social' : 'master');
+    $statsd->increment($statsdKey);
 
     $app['featureFacebook'] = $facebookLanding;
 
