@@ -1,0 +1,41 @@
+{% extends "layout.html.twig" %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="jumbotron">
+
+        <div class="row text-center">
+            <h1>Foobar To-Do List</h1>
+            <p class="lead">Welcome to the the ultimate platform to track your activities!</p>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 text-left">
+                <h4>Check out our amazing feature:</h4>
+                <ul>
+                    <li>Add, delete, modify items</li>
+                    <li>Set reminders</li>
+                    <li>Push notifications</li>
+                    <li>...much more!</li>
+                </ul>
+            </div>
+
+            <div class="col-md-4 text-right">
+                <h4>Have an account?</h4>
+                <p><a class="btn btn-sm btn-warning" href="#">Login</a></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row text-center">
+        {% include 'login/form.html.twig' %}
+    </div>
+
+    <footer>
+        &copy; Foobar, Inc
+    </footer>
+</div>
+
+{% endblock %}

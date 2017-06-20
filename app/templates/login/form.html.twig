@@ -1,0 +1,26 @@
+<h2>Create your account now</h2>
+
+<div class="login-email">
+    <p><small>Use your email</small></p>
+    <p>
+        <a class="btn btn-lg btn-success"
+           onclick="ga('send', 'event', 'register', 'credential-start')"
+           href="{{ url('landing.credentials') }}">Register</a>
+    </p>
+</div>
+
+{% if app.featureFacebook %}
+    <div class="login-fb">
+        <p><small>Or use your Facebook account</small></p>
+        <p>
+            <a href="{{ url('landing.facebook') }}"
+               onclick="ga('send', 'event', 'register', 'facebook-landing')">
+                <img class="fb-login" src="{{ asset('assets/facebook-login.png') }}" alt="Sign up with Facebook" />
+            </a>
+        </p>
+    </div>
+{% endif %}
+
+<script>ga('send', 'event', 'impression', '{{ app.featureFacebook ? 'feature-facebook' : 'master' }}')</script>
+
+
