@@ -1,17 +1,37 @@
 <?php
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /** @var $app Silex\Application */
 
-$app->get('/', function () use ($app) {
 
-    $facebookLanding = (bool) mt_rand(0, 1);
+$app->get('/', function (Request $request) use ($app) {
+
+    $extraHeaders = [];
+    $redisConfig = ['host' => 'redis'];
+    $redis = new \Predis\Client($redisConfig);
+    $featureService = new \Features\Service($redis);
+
+    // Switch
+    $feature = new \Features\SwitchFeature('featureFacebook');
+
+    // Condition
+//    $conditionFn = function() use ($request) { return (bool) $request->get('featureFacebook'); };
+//    $feature = new \Features\ConditionFeature('featureFacebook', $conditionFn);
+
+    // Percentage
+//    $feature = new \Features\PercentageFeature('featureFacebook');
+//    $feature->initialize($app['session']);
+//    $extraHeaders = ['X-Feature-UserQuota' => $feature->getUserQuota()];
+
+    $facebookLanding = $featureService->isActive($feature);
+
     $app['featureFacebook'] = $facebookLanding;
 
     return new Response(
         $app['twig']->render('index.html.twig', []), 200,
-        ['X-Feature' => $facebookLanding ? 'feature-facebook' : 'master']
+        ['X-Feature' => $facebookLanding ? 'feature-facebook' : 'master'] + $extraHeaders
     );
 
 })->bind('homepage');
