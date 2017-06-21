@@ -8,13 +8,17 @@ use Symfony\Component\HttpFoundation\Response;
 
 $app->get('/', function (Request $request) use ($app) {
 
-
     $redisConfig = ['host' => 'redis'];
     $redis = new \Predis\Client($redisConfig);
     $featureService = new \Features\Service($redis);
 
-    // Switch
-    $feature = new \Features\SwitchFeature('featureFacebook');
+    //    // Switch
+//    $feature = new \Features\SwitchFeature('featureFacebook');
+
+    // Condition
+    $conditionFn = function() use ($request) { return (bool) $request->get('featureFacebook'); };
+    $feature = new \Features\ConditionFeature('featureFacebook', $conditionFn);
+
 
     $facebookLanding = $featureService->isActive($feature);
     $app['featureFacebook'] = $facebookLanding;
