@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 $app->get('/', function (Request $request) use ($app) {
 
-    $facebookLanding = true;
+    $facebookLanding = (bool) mt_rand(0, 1);
     $app['featureFacebook'] = $facebookLanding;
 
     return new Response(
