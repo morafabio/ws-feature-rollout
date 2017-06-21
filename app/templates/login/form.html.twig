@@ -9,14 +9,14 @@
     </p>
 </div>
 
-{#{% if app.featureFacebook %}#}
-    {#<div class="login-fb">#}
-        {#<p><small>Or use your Facebook account</small></p>#}
-        {#<p>#}
-            {#<a href="{{ url('landing.facebook') }}"#}
-               {#onclick="ga('send', 'event', 'register', 'facebook-landing')">#}
-                {#<img class="fb-login" src="{{ asset('assets/facebook-login.png') }}" alt="Sign up with Facebook" />#}
-            {#</a>#}
-        {#</p>#}
-    {#</div>#}
-{#{% endif %}#}
+{% if app.featureFacebook %}
+    <div class="login-fb">
+        <p><small>Or use your Facebook account</small></p>
+        <p>
+            <a href="{{ url('landing.facebook') }}"
+               onclick="ga('send', 'event', 'register', 'facebook-landing')">
+                <img class="fb-login" src="{{ asset('assets/facebook-login.png') }}" alt="Sign up with Facebook" />
+            </a>
+        </p>
+    </div>
+{% endif %}
