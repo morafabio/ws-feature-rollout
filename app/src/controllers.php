@@ -15,17 +15,22 @@ $app->get('/', function (Request $request) use ($app) {
     //    // Switch
 //    $feature = new \Features\SwitchFeature('featureFacebook');
 
-    // Condition
-    $conditionFn = function() use ($request) { return (bool) $request->get('featureFacebook'); };
-    $feature = new \Features\ConditionFeature('featureFacebook', $conditionFn);
+//    // Condition
+//    $conditionFn = function() use ($request) { return (bool) $request->get('featureFacebook'); };
+//    $feature = new \Features\ConditionFeature('featureFacebook', $conditionFn);
 
+
+    // Quota
+    $feature = new \Features\PercentageFeature('featureFacebook');
+    $feature->initialize($app['session']);
+    $extraHeaders = ['X-Feature-UserQuota' => $feature->getUserQuota()];
 
     $facebookLanding = $featureService->isActive($feature);
     $app['featureFacebook'] = $facebookLanding;
 
     return new Response(
         $app['twig']->render('index.html.twig', []), 200,
-        ['X-Feature' => $facebookLanding ? 'feature-facebook' : 'master']
+        ['X-Feature' => $facebookLanding ? 'feature-facebook' : 'master'] + $extraHeaders
     );
 
 })->bind('homepage');
